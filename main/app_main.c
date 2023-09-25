@@ -18,9 +18,6 @@
 #include "esp_netif.h"
 #include "protocol_examples_common.h"
 
-#include "driver/gpio.h"
-#include "driver/adc.h"
-#include "esp_adc_cal.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
@@ -29,13 +26,14 @@
 #include "lwip/sockets.h"
 #include "lwip/dns.h"
 #include "lwip/netdb.h"
-#include "cJSON.h"
+
 #include "esp_log.h"
 #include "mqtt_client.h"
-
+#include <time.h>
+#include <stdlib.h>
+#include <math.h>
 static const char *TAG = "MQTT_EXAMPLE";
-const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
-static esp_adc_cal_characteristics_t adc1_chars;
+
 
 static void log_error_if_nonzero(const char *message, int error_code)
 {
@@ -56,23 +54,25 @@ static void log_error_if_nonzero(const char *message, int error_code)
  */
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
-    ESP_LOGD(TAG, "Event dispatched from event loop base=%s, event_id=%" PRIi32 "", base, event_id);
+    ESP_LOGD(TAG, "Event dispatched from event loop base=%s, event_id=%d", base, event_id);
     esp_mqtt_event_handle_t event = event_data;
     esp_mqtt_client_handle_t client = event->client;
-    /*int k = 0;
-    char string[20];*/
     int msg_id;
-    
     switch ((esp_mqtt_event_id_t)event_id) {
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        
-        msg_id = esp_mqtt_client_subscribe(client, "Test", 1);
+        char send_data[] = "data_test";
+            msg_id = esp_mqtt_client_publish(client, "/topic/qos0", &send_data, sizeof(send_data), 0, 0);
+        ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
+
+        msg_id = esp_mqtt_client_subscribe(client, "/topic/qos0", 0);
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
-        // msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
-        // ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
-        
+        msg_id = esp_mqtt_client_subscribe(client, "/topic/qos1", 1);
+        ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+
+        //msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
+        //ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
         break;
     case MQTT_EVENT_DISCONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
@@ -110,15 +110,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     }
 }
 
-void MQTT_sendJSON(esp_mqtt_client_handle_t client, const char *topic, cJSON *json_data) 
-{
-    int msg_id;
-    char *json_str = cJSON_Print(json_data);
-    msg_id = esp_mqtt_client_publish(client, topic, json_str, strlen(json_str), 1, 0);
-    ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
-    cJSON_free(json_str);
-}
-
 static void mqtt_app_start(void)
 {
     esp_mqtt_client_config_t mqtt_cfg = {
@@ -136,53 +127,28 @@ static void mqtt_app_start(void)
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(client);
     int msg_id;
-    double time = 0;
-    char string[10];
-    char JSON2[16] = ", \"humidity\": ";
-    char JSON3[14] = ", \"Random\": ";
-    char JSON4[12] = ", \"Time\": ";
-    char JSON5[5] = " }'";
-    int adc_value;
-    while(1)
-        {
-            char JSON1[100] = "'{ \"temp\": ";
-            // cJSON *json_data = cJSON_CreateObject();    // Create a sample JSON object
-            // cJSON_AddNumberToObject(json_data, "temp", k);
-            // k += 3;
-            // cJSON_AddNumberToObject(json_data, "humidity", k);
-            // k -= 1;
-            // cJSON_AddNumberToObject(json_data, "Random", k);
-            // cJSON_AddNumberToObject(json_data, "Time", time);
-            // time += 1;
-            // MQTT_sendJSON(client, "Test", json_data);   // Publish the JSON data to a topic
-            // cJSON_Delete(json_data);                    // Clean up cJSON object
-            // JSON = "{ \"temp\" : " + ",\"humidity\": " + ",\"Random\": " + "}}";
-            adc_value = adc1_get_raw(ADC1_CHANNEL_6);
-            strcat(JSON1, itoa(adc_value,string,10));
-            strcat(JSON1, JSON2);
-            adc_value += 3;
-            strcat(JSON1, itoa(adc_value,string,10));
-            strcat(JSON1, JSON3);
-            adc_value -= 1;
-            strcat(JSON1, itoa(adc_value,string,10));
-            strcat(JSON1, JSON4);
-            strcat(JSON1, itoa(time,string,10));
-            strcat(JSON1, JSON5);
-            time += 1;
-            msg_id = esp_mqtt_client_publish(client, "Test", JSON1, strlen(JSON1), 1, 0);
-            
-            ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
-            
-            // printf("ADC Value: %d \n", adc_value);
+    float k = 0;
+    while(true){
+        
+        // float data = k;
+        // char send_data[] = "";
+        // sprintf(send_data,"%.3f", data);
+        
+        float sin_var = sinf(k);
+        char send_data[] = "";
+        sprintf(send_data,"%.3f", sin_var);
+        msg_id = esp_mqtt_client_publish(client, "sensor01/data", &send_data, strlen(send_data), 0, 0);
+        ESP_LOGI(TAG, "sent publish successful, data=%s", send_data);
+        vTaskDelay(pdMS_TO_TICKS(50));
+        k = k + 0.05;
 
-            vTaskDelay(xDelay);
-        }
+    }
 }
 
 void app_main(void)
-{
+    {
     ESP_LOGI(TAG, "[APP] Startup..");
-    ESP_LOGI(TAG, "[APP] Free memory: %" PRIu32 " bytes", esp_get_free_heap_size());
+    ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
     ESP_LOGI(TAG, "[APP] IDF version: %s", esp_get_idf_version());
 
     esp_log_level_set("*", ESP_LOG_INFO);
@@ -202,23 +168,6 @@ void app_main(void)
      * examples/protocols/README.md for more information about this function.
      */
     ESP_ERROR_CHECK(example_connect());
-    // gpio_config_t GPIO_Config = {};
-    // GPIO_Config.pin_bit_mask = (1 << 18);          /*!< GPIO pin: set with bit mask, each bit maps to a GPIO */
-    // GPIO_Config.mode = GPIO_MODE_OUTPUT;               /*!< GPIO mode: set input/output mode                     */
-    // GPIO_Config.pull_up_en = GPIO_PULLUP_DISABLE;       /*!< GPIO pull-up                                         */
-    // GPIO_Config.pull_down_en = GPIO_PULLDOWN_DISABLE;   /*!< GPIO pull-down                                       */
-    // GPIO_Config.intr_type = GPIO_INTR_DISABLE;
-    // gpio_config(&GPIO_Config);
-    // while(1)
-    // {
-    //     uint8_t data = gpio_get_level(18);
-    //     printf("x = %d \n", data);
-    //     vTaskDelay(xDelay);
-    // }
-    esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_DEFAULT, 0, &adc1_chars);
-
-    adc1_config_width(ADC_WIDTH_BIT_DEFAULT);
-    adc1_config_channel_atten(ADC1_CHANNEL_6, ADC_ATTEN_DB_11);
 
     mqtt_app_start();
     
