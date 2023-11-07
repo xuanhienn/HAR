@@ -21,7 +21,6 @@
 #include "driver/gpio.h"
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
@@ -33,9 +32,10 @@
 #include "cJSON.h"
 #include "esp_log.h"
 #include "mqtt_client.h"
+#include "MPU6050.h"
 
 static const char *TAG = "MQTT_EXAMPLE";
-const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
+const TickType_t xDelay = 50 / portTICK_PERIOD_MS;
 static esp_adc_cal_characteristics_t adc1_chars;
 
 static void log_error_if_nonzero(const char *message, int error_code)
@@ -66,10 +66,10 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     
     switch ((esp_mqtt_event_id_t)event_id) {
     case MQTT_EVENT_CONNECTED:
-        ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+        //ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
         
         msg_id = esp_mqtt_client_subscribe(client, "Test", 1);
-        ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+        //ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
         // msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
         // ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
@@ -129,33 +129,45 @@ static void mqtt_app_start(void)
     /* The last argument may be used to pass data to the event handler, in this example mqtt_event_handler */
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(client);
+    MPU_Init();
+    int16_t ax, ay, az;
     int msg_id;
     double time = 0;
     char string[10];
-    char JSON2[16] = ", \"humidity\": ";
-    char JSON3[14] = ", \"Random\": ";
+    char JSON2[16] = ", \"ay\": ";
+    char JSON3[14] = ", \"az\": ";
     char JSON4[12] = ", \"Time\": ";
     char JSON5[5] = " }";
-    int adc_value;
+    //int adc_value;
     while(1)
         {
-            char JSON1[100] = "{\"temp\": ";
-            adc_value = adc1_get_raw(ADC1_CHANNEL_6);
-            strcat(JSON1, itoa(adc_value,string,10));
+            char JSON1[100] = "{ \"ax\": ";
+            // cJSON *json_data = cJSON_CreateObject();    // Create a sample JSON object
+            // cJSON_AddNumberToObject(json_data, "temp", k);
+            // k += 3;
+            // cJSON_AddNumberToObject(json_data, "humidity", k);
+            // k -= 1;
+            // cJSON_AddNumberToObject(json_data, "Random", k);
+            // cJSON_AddNumberToObject(json_data, "Time", time);
+            // time += 1;
+            // MQTT_sendJSON(client, "Test", json_data);   // Publish the JSON data to a topic
+            // cJSON_Delete(json_data);                    // Clean up cJSON object
+            // JSON = "{ \"temp\" : " + ",\"humidity\": " + ",\"Random\": " + "}}";
+            // adc_value = adc1_get_raw(ADC1_CHANNEL_6);
+            MPU_Get_Accelerometer(&ax, &ay, &az);
+            //printf("Accel: x=%d, y=%d, z=%d\n", ax, ay, az);
+            strcat(JSON1, itoa(ax,string,10));
             strcat(JSON1, JSON2);
-            adc_value += 3;
-            strcat(JSON1, itoa(adc_value,string,10));
+            strcat(JSON1, itoa(ay,string,10));
             strcat(JSON1, JSON3);
-            adc_value -= 1;
-            strcat(JSON1, itoa(adc_value,string,10));
+            strcat(JSON1, itoa(az,string,10));
             strcat(JSON1, JSON4);
             strcat(JSON1, itoa(time,string,10));
             strcat(JSON1, JSON5);
             time += 1;
             msg_id = esp_mqtt_client_publish(client, "Test", JSON1, strlen(JSON1), 1, 0);
-            ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
-            
-            // printf("ADC Value: %d \n", adc_value);
+            //ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
+            //printf("Accel: %s", JSON1);
 
             vTaskDelay(xDelay);
         }
