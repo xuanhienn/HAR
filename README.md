@@ -1,7 +1,7 @@
 | Supported Targets | ESP32 | ESP32-C3 | ESP32-S2 | ESP32-S3 |
 | ----------------- | ----- | -------- | -------- | -------- |
 
-# ESP-MQTT sample application
+# ESP-MQTT
 (See the README.md file in the upper level 'examples' directory for more information about examples.)
 
 This example connects to the broker URI selected using `idf.py menuconfig` (using mqtt tcp transport) and as a demonstration subscribes/unsubscribes and send a message on certain topic.
@@ -53,9 +53,12 @@ I (4684) MQTT_EXAMPLE: sent publish successful, msg_id=0
 I (4884) MQTT_CLIENT: deliver_publish, message_length_read=19, message_length=19
 I (4884) MQTT_EXAMPLE: MQTT_EVENT_DATA
 TOPIC=/topic/qos0
+
 DATA=data
 I (5194) MQTT_CLIENT: deliver_publish, message_length_read=19, message_length=19
 I (5194) MQTT_EXAMPLE: MQTT_EVENT_DATA
 TOPIC=/topic/qos0
 DATA=data
 ```
+# MATLAB model
+![image](https://github.com/xuanhienn/Human-Activity-Recognition/assets/29849377/7c314203-7688-4f27-ba76-3888b7d32009)
