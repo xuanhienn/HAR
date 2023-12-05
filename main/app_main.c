@@ -124,6 +124,9 @@ static void mqtt_app_start(void)
 {
     esp_mqtt_client_config_t mqtt_cfg = {
         .broker.address.uri = "mqtt://mqtt.eclipseprojects.io",    // "mqtt://username:password@broker.hivemq.com"
+        //.broker.address.uri = "mqtts://admin:P683LO1W3Ucb47UTWlPL1RGOTvsoFkV5@45kg21.stackhero-network.com:1884",
+   
+
     };
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
     /* The last argument may be used to pass data to the event handler, in this example mqtt_event_handler */
