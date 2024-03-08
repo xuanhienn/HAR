@@ -1150,3 +1150,13 @@
 157	411	7159616385316782	C:/Users/pc/esp/MQTT_TEST/build/bootloader/bootloader.elf	6cdb81bbbbe2cf2b
 157	411	7159616385316782	C:/Users/pc/esp/MQTT_TEST/build/bootloader/bootloader.bin	6cdb81bbbbe2cf2b
 157	411	7159616385316782	C:/Users/pc/esp/MQTT_TEST/build/bootloader/bootloader.map	6cdb81bbbbe2cf2b
+66	395	0	esp-idf/esptool_py/CMakeFiles/app_check_size	96f8064b13d6cf56
+66	395	0	C:/Users/pc/esp/MQTT_TEST/build/esp-idf/esptool_py/CMakeFiles/app_check_size	96f8064b13d6cf56
+57	412	7159616385316782	bootloader-prefix/src/bootloader-stamp/bootloader-build	6cdb81bbbbe2cf2b
+57	412	7159616385316782	bootloader/bootloader.elf	6cdb81bbbbe2cf2b
+57	412	7159616385316782	bootloader/bootloader.bin	6cdb81bbbbe2cf2b
+57	412	7159616385316782	bootloader/bootloader.map	6cdb81bbbbe2cf2b
+57	412	7159616385316782	C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-build	6cdb81bbbbe2cf2b
+57	412	7159616385316782	C:/Users/pc/esp/MQTT_TEST/build/bootloader/bootloader.elf	6cdb81bbbbe2cf2b
+57	412	7159616385316782	C:/Users/pc/esp/MQTT_TEST/build/bootloader/bootloader.bin	6cdb81bbbbe2cf2b
+57	412	7159616385316782	C:/Users/pc/esp/MQTT_TEST/build/bootloader/bootloader.map	6cdb81bbbbe2cf2b
