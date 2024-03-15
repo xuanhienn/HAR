@@ -171,7 +171,7 @@ static void mqtt_app_start(void)
             msg_id = esp_mqtt_client_publish(client, "Test", JSON1, strlen(JSON1), 1, 0);
             //ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
             //printf("Accel: %s", JSON1);
-
+            //testing 
             vTaskDelay(xDelay);
         }
 }
