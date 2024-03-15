@@ -172,6 +172,7 @@ static void mqtt_app_start(void)
             //ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
             //printf("Accel: %s", JSON1);
             //testing 
+            //testing
             vTaskDelay(xDelay);
         }
 }
