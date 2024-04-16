@@ -42,11 +42,11 @@ function handleMessage(~, message, data)
         plot(data.y, 'g'); % Vẽ đồ thị cho data.y với màu xanh lá cây
         plot(data.z, 'b'); % Vẽ đồ thị cho data.z với màu xanh dương
         hold off;
-        ylim([0,20000]);
+        ylim([0, max([data.x, data.y, data.z]) + 10]);
         grid on;
         title('Human Recognition');
         legend('Ax', 'Ay', 'Az');
-
+        drawnow
         elapsedTime = toc;
         disp(['Thời gian chạy của callback là: ', num2str(elapsedTime), ' giây']);
     catch ME
