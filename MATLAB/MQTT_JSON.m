@@ -22,7 +22,12 @@ gy = 0;
 gz = 0;
 global temp;
 temp = 0;
-
+global buff;
+buff = zeros(1,60,6);
+global params;
+params= importONNXFunction("D:\NCKH\CODE\Human-Activity-Recognition\MATLAB\model_onnx2.onnx","modelHAR");
+global predicted_label;
+predicted_label = ["running","walking","sitting","hiking","swimming","sleeping"];
 
 data_acc = struct('ax', ax, 'ay', ay, 'az', az);
 data_gy = struct('gx', gx, 'gy', gy, 'gz', gz);
@@ -67,8 +72,6 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
         %data_gy.gz = [data.gz, gz];
         global temp;
         t = op.Time;
-        disp(['t ',num2str(t)]);
-        disp(['temp ',num2str(temp)]);
         if t<=temp
             disp('Return');
             return
@@ -86,6 +89,18 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
         addpoints(anim_linegZ,t,gz);
         %plot(data_gy)
         temp = t;
+        % model code
+        global buff;
+        global params;
+        global predicted_label;
+        if isequal(size(buff), [1, 60, 6])
+           [dense_1, ] = modelHAR(reshape(buff,[1,60,6]), params);
+           [~, predicted_class] = max(dense_1);
+           disp(predicted_label(predicted_class));
+           buff = zeros(1, 60, 6);
+        end
+
+        %
         elapsedTime = toc;
         disp(['Thời gian chạy của callback là: ', num2str(elapsedTime), ' giây']);
 
