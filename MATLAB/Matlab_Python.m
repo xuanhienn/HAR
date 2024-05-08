@@ -124,9 +124,11 @@ data2 = [[[0.61204249 0.43907278 0.71082642 0.50046237 0.49654502 0.571198]
 resized_data = reshape(data, [1, 60, 6]);
 disp(resized_data)
 %%
-params = importONNXFunction("model_onnx2.onnx","modelHAR")
+params = importONNXFunction("model_onnx2.onnx","modelHAR");
 %%
 %[dense_1, state] = modelHAR(randn(10,60,6), params);
 %[dense_1, state] = modelHAR(resized_data, params);
-[dense_1, state] = modelHAR(reshape(data2,[1,60,6]), params)
-[~, predicted_class] = max(dense_1)
+predicted_label = ["walking","jogging","stairs","sitting","standing"];
+[dense_1, state] = modelHAR(reshape(data2,[1,60,6]), params);
+[~, predicted_class] = max(dense_1);
+disp(predicted_label(predicted_class))

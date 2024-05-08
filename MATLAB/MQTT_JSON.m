@@ -24,10 +24,12 @@ global temp;
 temp = 0;
 global buff;
 buff = zeros(1,60,6);
+global i;
+i = 1;
 global params;
 params= importONNXFunction("D:\NCKH\CODE\Human-Activity-Recognition\MATLAB\model_onnx2.onnx","modelHAR");
-global predicted_label;
-predicted_label = ["running","walking","sitting","hiking","swimming","sleeping"];
+
+
 
 data_acc = struct('ax', ax, 'ay', ay, 'az', az);
 data_gy = struct('gx', gx, 'gy', gy, 'gz', gz);
@@ -92,10 +94,22 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
         % model code
         global buff;
         global params;
-        global predicted_label;
-        if isequal(size(buff), [1, 60, 6])
+        global i;
+        buff(1, i, :) =  [ax, ay, az, gx, gy, gz];
+        %disp(buff(1,i,:))
+        i = i + 1;
+        %if isequal(size(buff), [1, 60, 6])
+        if buff(1,end,end) ~= 0
+           
+           disp(i);
+           disp("Buff is full"); 
+           i = 1;
+           tic;
            [dense_1, ] = modelHAR(reshape(buff,[1,60,6]), params);
            [~, predicted_class] = max(dense_1);
+           t1 = toc;
+           disp(['Thời gian chạy của model là: ', num2str(t1), ' giây']);
+           predicted_label = ["running","hiking","swimming","sleeping","walking","sitting"];
            disp(predicted_label(predicted_class));
            buff = zeros(1, 60, 6);
         end
