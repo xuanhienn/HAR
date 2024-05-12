@@ -1,13 +1,5 @@
-/* MQTT (over TCP) Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
-
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
@@ -33,10 +25,20 @@
 #include "esp_log.h"
 #include "mqtt_client.h"
 #include "MPU6050.h"
+#include "max30102.h"
+#include "driver/i2c.h"
 
 static const char *TAG = "MQTT_EXAMPLE";
 const TickType_t xDelay = 50 / portTICK_PERIOD_MS;
 static esp_adc_cal_characteristics_t adc1_chars;
+
+#define I2C_SDA 18
+#define I2C_SCL 19
+#define I2C_FRQ 100000
+#define I2C_PORT I2C_NUM_1
+
+max30102_config_t max30102 = {};
+max30102_data_t result = {};
 
 static void log_error_if_nonzero(const char *message, int error_code)
 {
@@ -45,16 +47,6 @@ static void log_error_if_nonzero(const char *message, int error_code)
     }
 }
 
-/*
- * @brief Event handler registered to receive MQTT events
- *
- *  This function is called by the MQTT client event loop.
- *
- * @param handler_args user data registered to the event.
- * @param base Event base for the handler(always MQTT Base in this example).
- * @param event_id The id for the received event.
- * @param event_data The data for the event, esp_mqtt_event_handle_t.
- */
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
     ESP_LOGD(TAG, "Event dispatched from event loop base=%s, event_id=%" PRIi32 "", base, event_id);
@@ -124,53 +116,69 @@ static void mqtt_app_start(void)
 {
     esp_mqtt_client_config_t mqtt_cfg = {
         .broker.address.uri = "mqtt://mqtt.eclipseprojects.io",    // "mqtt://username:password@broker.hivemq.com"
+        //.broker.address.uri = "mqtts://admin:P683LO1W3Ucb47UTWlPL1RGOTvsoFkV5@45kg21.stackhero-network.com:1884",
     };
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
-    /* The last argument may be used to pass data to the event handler, in this example mqtt_event_handler */
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(client);
-    MPU_Init();
-    int16_t ax, ay, az;
+
+    int16_t ax, ay, az, gx, gy, gz;
     int msg_id;
-    double time = 0;
-    char string[10];
+    int time = 0;
+    char string[5];
     char JSON2[16] = ", \"ay\": ";
     char JSON3[14] = ", \"az\": ";
-    char JSON4[12] = ", \"Time\": ";
-    char JSON5[5] = " }";
-    //int adc_value;
+    char JSON4[16] = ", \"gx\": ";
+    char JSON5[14] = ", \"gy\": ";
+    char JSON6[16] = ", \"gz\": ";
+    char JSON7[14] = ", \"hb\": ";
+    char JSON8[12] = ", \"Time\": ";
+    char JSON9[5] = " }";
+    char JSON10[16] = ", \"ay\": ";
     while(1)
         {
-            char JSON1[100] = "{ \"ax\": ";
-            // cJSON *json_data = cJSON_CreateObject();    // Create a sample JSON object
-            // cJSON_AddNumberToObject(json_data, "temp", k);
-            // k += 3;
-            // cJSON_AddNumberToObject(json_data, "humidity", k);
-            // k -= 1;
-            // cJSON_AddNumberToObject(json_data, "Random", k);
-            // cJSON_AddNumberToObject(json_data, "Time", time);
-            // time += 1;
-            // MQTT_sendJSON(client, "Test", json_data);   // Publish the JSON data to a topic
-            // cJSON_Delete(json_data);                    // Clean up cJSON object
-            // JSON = "{ \"temp\" : " + ",\"humidity\": " + ",\"Random\": " + "}}";
-            // adc_value = adc1_get_raw(ADC1_CHANNEL_6);
+            char JSON1[200] = "{ \"ax\": ";
+            //MPU
+            max30102_update(&max30102, &result);
+            //printf("BPM: %f | SpO2: %f%%\n", result.heart_bpm, result.spO2);
             MPU_Get_Accelerometer(&ax, &ay, &az);
+            MPU_Get_Gyroscope(&gx, &gy, &gz);
             //printf("Accel: x=%d, y=%d, z=%d\n", ax, ay, az);
-            strcat(JSON1, itoa(ax,string,10));
-            strcat(JSON1, JSON2);
-            strcat(JSON1, itoa(ay,string,10));
+
+            strcat(JSON1, gcvt(ax/2048.0,9,string));
+            strcat(JSON1, JSON10);
+            strcat(JSON1, gcvt(ay/2048.0,9,string));
             strcat(JSON1, JSON3);
-            strcat(JSON1, itoa(az,string,10));
+            strcat(JSON1, gcvt(az/2048.0,9,string));
             strcat(JSON1, JSON4);
-            strcat(JSON1, itoa(time,string,10));
+            strcat(JSON1, gcvt(gx/131.0,9,string));
             strcat(JSON1, JSON5);
+            strcat(JSON1, gcvt(gy/131.0,9,string));
+            strcat(JSON1, JSON6);
+            strcat(JSON1, gcvt(gz/131.0,9,string));
+            strcat(JSON1, JSON7);
+            strcat(JSON1, gcvt(result.heart_bpm,9,string));
+            strcat(JSON1, JSON8);
+            strcat(JSON1, itoa(time,string,10));
+            strcat(JSON1, JSON9);
             time += 1;
-            msg_id = esp_mqtt_client_publish(client, "Test", JSON1, strlen(JSON1), 2, 0);
+            msg_id = esp_mqtt_client_publish(client, "Test", JSON1, strlen(JSON1), 1, 0);
             //ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
             //printf("Accel: %s", JSON1);
-
             vTaskDelay(xDelay);
         }
+}
+
+esp_err_t i2c_master_init(i2c_port_t i2c_port){
+    i2c_config_t conf = {};
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = I2C_SDA;
+    conf.scl_io_num = I2C_SCL;
+    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.master.clk_speed = I2C_FRQ;
+    i2c_param_config(i2c_port, &conf);
+    return i2c_driver_install(i2c_port, I2C_MODE_MASTER, 0, 0, 0);
 }
 
 void app_main(void)
@@ -190,29 +198,26 @@ void app_main(void)
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
-
-    /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
-     * Read "Establishing Wi-Fi or Ethernet Connection" section in
-     * examples/protocols/README.md for more information about this function.
-     */
     ESP_ERROR_CHECK(example_connect());
-    // gpio_config_t GPIO_Config = {};
-    // GPIO_Config.pin_bit_mask = (1 << 18);          /*!< GPIO pin: set with bit mask, each bit maps to a GPIO */
-    // GPIO_Config.mode = GPIO_MODE_OUTPUT;               /*!< GPIO mode: set input/output mode                     */
-    // GPIO_Config.pull_up_en = GPIO_PULLUP_DISABLE;       /*!< GPIO pull-up                                         */
-    // GPIO_Config.pull_down_en = GPIO_PULLDOWN_DISABLE;   /*!< GPIO pull-down                                       */
-    // GPIO_Config.intr_type = GPIO_INTR_DISABLE;
-    // gpio_config(&GPIO_Config);
-    // while(1)
-    // {
-    //     uint8_t data = gpio_get_level(18);
-    //     printf("x = %d \n", data);
-    //     vTaskDelay(xDelay);
-    // }
+    
     esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_DEFAULT, 0, &adc1_chars);
-
     adc1_config_width(ADC_WIDTH_BIT_DEFAULT);
     adc1_config_channel_atten(ADC1_CHANNEL_6, ADC_ATTEN_DB_11);
 
-    
+    i2c_master_init(I2C_PORT);
+    MPU_Init();
+    max30102_init( &max30102, I2C_PORT,
+                   MAX30102_DEFAULT_OPERATING_MODE,
+                   MAX30102_DEFAULT_SAMPLING_RATE,
+                   MAX30102_DEFAULT_LED_PULSE_WIDTH,
+                   MAX30102_DEFAULT_IR_LED_CURRENT,
+                   MAX30102_DEFAULT_START_RED_LED_CURRENT,
+                   MAX30102_DEFAULT_MEAN_FILTER_SIZE,
+                   MAX30102_DEFAULT_PULSE_BPM_SAMPLE_SIZE,
+                   MAX30102_DEFAULT_ADC_RANGE, 
+                   MAX30102_DEFAULT_SAMPLE_AVERAGING,
+                   MAX30102_DEFAULT_ROLL_OVER,
+                   MAX30102_DEFAULT_ALMOST_FULL,
+                   false );
+    mqtt_app_start();
 }

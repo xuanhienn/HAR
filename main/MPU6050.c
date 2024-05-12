@@ -39,16 +39,16 @@ uint8_t MPU_Init()
 	MPU_Set_Gyro_FSR(3);
 	MPU_Set_Accel_FSR(0);
 	MPU_Set_Rate(50);
-	MPU_Write_Byte(MPU_INT_EN_REG,0X00);	//关闭所有中断
-	MPU_Write_Byte(MPU_USER_CTRL_REG,0X00);	//I2C主模式关闭
-	MPU_Write_Byte(MPU_FIFO_EN_REG,0X00);	//关闭FIFO
-	MPU_Write_Byte(MPU_INTBP_CFG_REG,0X80);	//INT引脚低电平有效
+	MPU_Write_Byte(MPU_INT_EN_REG,0X00);	
+	MPU_Write_Byte(MPU_USER_CTRL_REG,0X00);	
+	MPU_Write_Byte(MPU_FIFO_EN_REG,0X00);	
+	MPU_Write_Byte(MPU_INTBP_CFG_REG,0X80);	
 	MPU_Read_Byte(MPU_DEVICE_ID_REG, &res);
 	if(res == MPU_ADDR)
 	{
-		MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X01);	//设置CLKSEL,PLL X轴为参考
-		MPU_Write_Byte(MPU_PWR_MGMT2_REG,0X00);	//加速度与陀螺仪都工作
-		MPU_Set_Rate(50);						//设置采样率为50Hz
+		MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X01);	
+		MPU_Write_Byte(MPU_PWR_MGMT2_REG,0X00);
+		MPU_Set_Rate(50);						
 	}else
 		return 1;
 	return 0;

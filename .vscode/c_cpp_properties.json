@@ -9,6 +9,7 @@
                 "${config:idf.espAdfPath}/components/**",
                 "${config:idf.espAdfPathWin}/components/**",
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/build/config",
                 "C:\\Users\\pc\\esp\\esp-idf\\components"
             ],
             "browse": {

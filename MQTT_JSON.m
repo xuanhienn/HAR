@@ -24,73 +24,32 @@ Data = subscribe(myMQTT,Topic_sub, QualityOfService = 1, Callback = @(src, msg) 
 
 function handleMessage(~, message, data)
     try
+        tic;
         op = jsondecode(message);
         disp(op);
         ax = op.ax;
         ay = op.ay;
         az = op.az;
 
+        % Thêm dữ liệu mới vào data
         data.x = [data.x, ax];
         data.y = [data.y, ay];
         data.z = [data.z, az];
 
-        subplot(3,1,1);
-        plot(data.x);
-        ylim([0,5000]);
-        grid ON;
-        title("Luminosity");
+        subplot(3,1,[1 2]);
+        plot(data.x, 'r'); % Vẽ đồ thị cho data.x với màu đỏ
+        hold on;
+        plot(data.y, 'g'); % Vẽ đồ thị cho data.y với màu xanh lá cây
+        plot(data.z, 'b'); % Vẽ đồ thị cho data.z với màu xanh dương
+        hold off;
+        ylim([0,20000]);
+        grid on;
+        title('Human Recognition');
+        legend('Ax', 'Ay', 'Az');
 
-        subplot(3,1,2);
-        plot(data.y);
-        ylim([0,5000]);
-        grid ON;
-        title("Humidity");
-
-        subplot(3,1,3);
-        plot(data.z);
-        ylim([0,5000]);
-        grid ON;
-        title("Accelerator");
-        drawnow     
-
+        elapsedTime = toc;
+        disp(['Thời gian chạy của callback là: ', num2str(elapsedTime), ' giây']);
     catch ME
         disp(['Lỗi khi xử lý tin nhắn: ' ME.message]);
     end
 end
-
-
-% while true
-%    messMqtt = read(myMQTT);
-%    if ~isempty(messMqtt)
-%     op = jsondecode(messMqtt.Data(1));
-%     values = op.Time;
-%     disp(values);
-%     ax = op.ax;
-%     ay = op.ay;
-%     az = op.az;
-% 
-%     x = [x,ax];
-%     y = [y,ay];
-%     z = [z,az];
-% 
-%     subplot(3,1,1);
-%     plot(x);
-%     ylim([0,5000]);
-%     grid ON;
-%     title("Luminosity");
-% 
-%     subplot(3,1,2);
-%     plot(y);
-%     ylim([0,5000]);
-%     grid ON;
-%     title("Humidity");
-% 
-%     subplot(3,1,3);
-%     plot(z);
-%     ylim([0,5000]);
-%     grid ON;
-%     title("Accelerator");
-%     drawnow     
-%     end
-% end
-

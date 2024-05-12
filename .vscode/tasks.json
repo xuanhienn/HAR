@@ -47,10 +47,7 @@
                     }
                 }
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "label": "Set ESP-IDF Target",
@@ -67,6 +64,10 @@
                     "severity": 4,
                     "message": 5
                 }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
             }
         },
         {

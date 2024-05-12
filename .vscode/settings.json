@@ -34,7 +34,17 @@
         "stdexcept": "c",
         "system_error": "c",
         "typeinfo": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "stdlib.h": "c",
+        "max30102_api.h": "c",
+        "task.h": "c",
+        "freertos.h": "c",
+        "max30102-registers.h": "c",
+        "max30102.h": "c",
+        "protocol_examples_common.h": "c",
+        "i2c.h": "c",
+        "inv_mpu.h": "c",
+        "mpu6050.h": "c"
     },
     "git.ignoreLimitWarning": true
 }

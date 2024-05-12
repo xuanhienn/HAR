@@ -3,8 +3,8 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Initialize Firebase
-cred = credentials.Certificate("C:\\Users\\pc\\esp\\MQTT_TEST\\human-reconition-firebase-adminsdk-pf3ry-b4d1a35cc2.json")
-firebase_admin.initialize_app(cred, {'databaseURL': 'https://human-reconition-default-rtdb.asia-southeast1.firebasedatabase.app/'})
+cred = credentials.Certificate("C:\\Users\\pc\\OneDrive\\Documents\\Tài Liệu + Thực hành\\HK6\\ĐỒ ÁN 1\\human-rocognition-firebase-adminsdk-b5gkb-d2f4e435f7.json")
+firebase_admin.initialize_app(cred, {'databaseURL': 'https://human-rocognition-default-rtdb.firebaseio.com/'})
 
 # Callback khi nhận được dữ liệu từ MQTT
 def on_message(client, userdata, msg):
