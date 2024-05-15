@@ -3,10 +3,10 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Initialize Firebase
-#cred = credentials.Certificate("C:\\Users\\pc\\esp\\MQTT_TEST\\human-reconition-firebase-adminsdk-pf3ry-b4d1a35cc2.json")
+#cred = credentials.Certificate("D:\\NCKH\\CODE\\Human-Activity-Recognition\\human-reconition-firebase-adminsdk-pf3ry-b4d1a35cc2.json")
 #firebase_admin.initialize_app(cred, {'databaseURL': 'https://human-reconition-default-rtdb.asia-southeast1.firebasedatabase.app/'})
-cred = credentials.Certificate("D:\\NCKH\\CODE\\Human-Activity-Recognition\\private_key.json")
-firebase_admin.initialize_app(cred, {'databaseURL': 'https://esp32-b024e-default-rtdb.asia-southeast1.firebasedatabase.app/'})
+cred = credentials.Certificate("D:\\NCKH\\CODE\\Human-Activity-Recognition\\har-esp32-firebase-adminsdk-jd70c-d84c7218c1.json")
+firebase_abaseURadmin.initialize_app(cred, {'databaseURL': 'https://har-esp32-default-rtdb.asia-southeast1.firebasedatabase.app/'})
 # Callback khi nhận được dữ liệu từ MQTT
 def on_message(client, userdata, msg):
     # Xử lý dữ liệu từ msg.payload
