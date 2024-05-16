@@ -29,7 +29,7 @@
 #include "driver/i2c.h"
 
 static const char *TAG = "MQTT_EXAMPLE";
-const TickType_t xDelay = 50 / portTICK_PERIOD_MS;
+const TickType_t xDelay = 75 / portTICK_PERIOD_MS;
 static esp_adc_cal_characteristics_t adc1_chars;
 
 #define I2C_SDA 18
