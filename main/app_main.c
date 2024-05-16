@@ -156,8 +156,8 @@ static void mqtt_app_start(void)
             strcat(JSON1, gcvt(gy/131.0,9,string));
             strcat(JSON1, JSON6);
             strcat(JSON1, gcvt(gz/131.0,9,string));
-            strcat(JSON1, JSON7);
-            strcat(JSON1, gcvt(result.heart_bpm,9,string));
+            /*strcat(JSON1, JSON7);
+            strcat(JSON1, gcvt(result.heart_bpm,9,string));*/
             strcat(JSON1, JSON8);
             strcat(JSON1, itoa(time,string,10));
             strcat(JSON1, JSON9);
