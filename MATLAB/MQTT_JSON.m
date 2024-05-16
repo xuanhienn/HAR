@@ -21,7 +21,7 @@ gz = 0;
 global temp;
 temp = 0;
 global buff;
-buff = zeros(1,100,6);
+buff = zeros(1,60,6);
 global i;
 i = 1;
 global params;
@@ -56,7 +56,7 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
     try
         tic;
         op = jsondecode(message);
-        disp(op);
+        %disp(op);
 
         ax = op.ax;
         ay = op.ay;
@@ -67,7 +67,7 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
         global temp;
         t = op.Time;
         if t<=temp
-            disp('Return');
+            %disp('Return');
             return
         end
 
@@ -104,13 +104,14 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
            t1 = toc;
            disp(['Thời gian chạy của model là: ', num2str(t1), ' giây']);
            predicted_label = ["jogging","sitting","stairs","standing","walking"];
-           disp("predict: ",predicted_label(predicted_class));
-           buff = zeros(1, 100, 6);
+           disp(predicted_label(predicted_class))
+           disp(num2str(predicted_class));
+           buff = zeros(1, 60, 6);
         end
 
         %
         elapsedTime = toc;
-        disp(['Thời gian chạy của callback là: ', num2str(elapsedTime), ' giây']);
+        %disp(['Thời gian chạy của callback là: ', num2str(elapsedTime), ' giây']);
 
     catch ME
         disp(['Lỗi khi xử lý tin nhắn: ' ME.message]);
