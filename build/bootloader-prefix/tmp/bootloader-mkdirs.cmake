@@ -4,19 +4,19 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "C:/Users/pc/esp/esp-idf/components/bootloader/subproject"
-  "C:/Users/pc/esp/MQTT_TEST/build/bootloader"
-  "C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix"
-  "C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/tmp"
-  "C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp"
-  "C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src"
-  "C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp"
+  "D:/Espressif/esp-idf/components/bootloader/subproject"
+  "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader"
+  "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix"
+  "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/tmp"
+  "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp"
+  "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src"
+  "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-C:/Users/pc/esp/MQTT_TEST/build/CMakeFiles/bootloader
-C:/Users/pc/esp/MQTT_TEST/build/CMakeFiles/bootloader.rule
-C:/Users/pc/esp/MQTT_TEST/build/CMakeFiles/bootloader-complete.rule
-C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-C:/Users/pc/esp/MQTT_TEST/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/CMakeFiles/bootloader
+D:/NCKH/CODE/Human-Activity-Recognition/build/CMakeFiles/bootloader.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/CMakeFiles/bootloader-complete.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+D:/NCKH/CODE/Human-Activity-Recognition/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
