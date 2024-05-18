@@ -35,7 +35,7 @@
 #include "MPU6050.h"
 
 static const char *TAG = "MQTT_EXAMPLE";
-const TickType_t xDelay = 75 / portTICK_PERIOD_MS;
+const TickType_t xDelay = 100 / portTICK_PERIOD_MS;
 static esp_adc_cal_characteristics_t adc1_chars;
 
 static void log_error_if_nonzero(const char *message, int error_code)
