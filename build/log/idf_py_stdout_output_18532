@@ -1,0 +1,3 @@
+[0/1] Re-running CMake...
+-- Component directory D:/NCKH/CODE/Human-Activity-Recognition/components/mingw64 does not contain a CMakeLists.txt file. No component will be added
+-- ccache will be used for faster recompilation

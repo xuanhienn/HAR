@@ -1,0 +1,55 @@
+[0;33m--- WARNING: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM4 instead...[0m
+[0;33m--- idf_monitor on \\.\COM4 115200 ---[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x400813e4: call_start_cpu1 at D:/Espressif/esp-idf/components/esp_system/port/cpu_start.c:143
+[0m
+[0;33m0x400d75a6: app_main at D:/NCKH/CODE/Human-Activity-Recognition/main/app_main.c:201 (discriminator 1)
+[0m
+[0;33m0x4008a2cf: _esp_error_check_failed at D:/Espressif/esp-idf/components/esp_system/esp_err.c:47
+[0m
+[0;33m0x40081fe6: panic_abort at D:/Espressif/esp-idf/components/esp_system/panic.c:424
+[0m
+[0;33m0x4008a2d9: esp_system_abort at D:/Espressif/esp-idf/components/esp_system/esp_system.c:153
+[0m
+[0;33m0x40090df2: abort at D:/Espressif/esp-idf/components/newlib/abort.c:38
+[0m
+[0;33m0x4008a2cf: _esp_error_check_failed at D:/Espressif/esp-idf/components/esp_system/esp_err.c:47
+[0m
+[0;33m0x400d75a6: app_main at D:/NCKH/CODE/Human-Activity-Recognition/main/app_main.c:201 (discriminator 1)
+[0m
+[0;33m0x401667e7: main_task at D:/Espressif/esp-idf/components/freertos/FreeRTOS-Kernel/portable/port_common.c:131 (discriminator 2)
+[0m
+[0;33m0x4008d469: vPortTaskWrapper at D:/Espressif/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:154
+[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x400813e4: call_start_cpu1 at D:/Espressif/esp-idf/components/esp_system/port/cpu_start.c:143
+[0m
+[0;33m0x400d75a6: app_main at D:/NCKH/CODE/Human-Activity-Recognition/main/app_main.c:201 (discriminator 1)
+[0m
+[0;33m0x4008a2cf: _esp_error_check_failed at D:/Espressif/esp-idf/components/esp_system/esp_err.c:47
+[0m
+[0;33m0x40081fe6: panic_abort at D:/Espressif/esp-idf/components/esp_system/panic.c:424
+[0m
+[0;33m0x4008a2d9: esp_system_abort at D:/Espressif/esp-idf/components/esp_system/esp_system.c:153
+[0m
+[0;33m0x40090df2: abort at D:/Espressif/esp-idf/components/newlib/abort.c:38
+[0m
+[0;33m0x4008a2cf: _esp_error_check_failed at D:/Espressif/esp-idf/components/esp_system/esp_err.c:47
+[0m
+[0;33m0x400d75a6: app_main at D:/NCKH/CODE/Human-Activity-Recognition/main/app_main.c:201 (discriminator 1)
+[0m
+[0;33m0x401667e7: main_task at D:/Espressif/esp-idf/components/freertos/FreeRTOS-Kernel/portable/port_common.c:131 (discriminator 2)
+[0m
+[0;33m0x4008d469: vPortTaskWrapper at D:/Espressif/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:154
+[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x400813e4: call_start_cpu1 at D:/Espressif/esp-idf/components/esp_system/port/cpu_start.c:143
+[0m
+[1;31mGetOverlappedResult failed (PermissionError(13, 'Access is denied.', None, 5))[0m
+[0;33mWaiting for the device to reconnect[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m[0m
+[0m
