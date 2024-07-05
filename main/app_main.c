@@ -21,6 +21,9 @@
 #include "driver/gpio.h"
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
+#include "driver/gpio.h"
+#include "driver/adc.h"
+#include "esp_adc_cal.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
@@ -29,6 +32,7 @@
 #include "lwip/sockets.h"
 #include "lwip/dns.h"
 #include "lwip/netdb.h"
+#include "cJSON.h"
 #include "cJSON.h"
 #include "esp_log.h"
 #include "mqtt_client.h"
@@ -60,11 +64,15 @@ static void log_error_if_nonzero(const char *message, int error_code)
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
     ESP_LOGD(TAG, "Event dispatched from event loop base=%s, event_id=%" PRIi32 "", base, event_id);
+    ESP_LOGD(TAG, "Event dispatched from event loop base=%s, event_id=%" PRIi32 "", base, event_id);
     esp_mqtt_event_handle_t event = event_data;
     esp_mqtt_client_handle_t client = event->client;
     /*int k = 0;
     char string[20];*/
+    /*int k = 0;
+    char string[20];*/
     int msg_id;
+    
     
     switch ((esp_mqtt_event_id_t)event_id) {
     case MQTT_EVENT_CONNECTED:
@@ -73,6 +81,9 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         msg_id = esp_mqtt_client_subscribe(client, "Test", 1);
         //ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
+        // msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
+        // ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
+        
         // msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
         // ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
         
@@ -111,6 +122,15 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         ESP_LOGI(TAG, "Other event id:%d", event->event_id);
         break;
     }
+}
+
+void MQTT_sendJSON(esp_mqtt_client_handle_t client, const char *topic, cJSON *json_data) 
+{
+    int msg_id;
+    char *json_str = cJSON_Print(json_data);
+    msg_id = esp_mqtt_client_publish(client, topic, json_str, strlen(json_str), 1, 0);
+    ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
+    cJSON_free(json_str);
 }
 
 void MQTT_sendJSON(esp_mqtt_client_handle_t client, const char *topic, cJSON *json_data) 
@@ -184,7 +204,9 @@ int16_t ax, ay, az, gx, gy, gz;
 
 void app_main(void)
 {
+{
     ESP_LOGI(TAG, "[APP] Startup..");
+    ESP_LOGI(TAG, "[APP] Free memory: %" PRIu32 " bytes", esp_get_free_heap_size());
     ESP_LOGI(TAG, "[APP] Free memory: %" PRIu32 " bytes", esp_get_free_heap_size());
     ESP_LOGI(TAG, "[APP] IDF version: %s", esp_get_idf_version());
 
@@ -205,6 +227,23 @@ void app_main(void)
      * examples/protocols/README.md for more information about this function.
      */
     ESP_ERROR_CHECK(example_connect());
+    // gpio_config_t GPIO_Config = {};
+    // GPIO_Config.pin_bit_mask = (1 << 18);          /*!< GPIO pin: set with bit mask, each bit maps to a GPIO */
+    // GPIO_Config.mode = GPIO_MODE_OUTPUT;               /*!< GPIO mode: set input/output mode                     */
+    // GPIO_Config.pull_up_en = GPIO_PULLUP_DISABLE;       /*!< GPIO pull-up                                         */
+    // GPIO_Config.pull_down_en = GPIO_PULLDOWN_DISABLE;   /*!< GPIO pull-down                                       */
+    // GPIO_Config.intr_type = GPIO_INTR_DISABLE;
+    // gpio_config(&GPIO_Config);
+    // while(1)
+    // {
+    //     uint8_t data = gpio_get_level(18);
+    //     printf("x = %d \n", data);
+    //     vTaskDelay(xDelay);
+    // }
+    esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_DEFAULT, 0, &adc1_chars);
+
+    adc1_config_width(ADC_WIDTH_BIT_DEFAULT);
+    adc1_config_channel_atten(ADC1_CHANNEL_6, ADC_ATTEN_DB_11);
     // gpio_config_t GPIO_Config = {};
     // GPIO_Config.pin_bit_mask = (1 << 18);          /*!< GPIO pin: set with bit mask, each bit maps to a GPIO */
     // GPIO_Config.mode = GPIO_MODE_OUTPUT;               /*!< GPIO mode: set input/output mode                     */
