@@ -26,7 +26,7 @@ buff = zeros(1,100,6);
 global reuse_buff;
 reuse_buff = zeros(1,60,6);
 global params;
-params= importONNXFunction("D:\NCKH\CODE\Human-Activity-Recognition\MATLAB\model_onnx2_v5.onnx","modelHAR3");
+params= importONNXFunction("D:\NCKH\CODE\Human-Activity-Recognition\MATLAB\model_onnx2_v4.onnx","modelHAR3");
 
 
 hfig = figure;clf
@@ -118,8 +118,7 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
            %disp("flag model 1")
            [dense_1, ] = modelHAR3(buffered_data_3d(3,1:60,:), params);
            [~, predicted_class] = max(dense_1);
-           %predicted_label = ["jogging","sitting","stairs","standing","walking"];
-           predicted_label  = ["sitting", "standing", "walking", "jogging", "stairs"];          
+           predicted_label = ["jogging","sitting","stairs","standing","walking"];
            disp(["Predict Activity: " predicted_label(predicted_class)])
            %disp(['Real act: ' act]);
            %disp(num2str(predicted_class));
@@ -129,8 +128,7 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
            %disp("flag model 2")
            [dense_1, ] = modelHAR3(buffered_data_3d(2,1:60,:), params);
            [~, predicted_class] = max(dense_1);
-           %predicted_label = ["jogging","sitting","stairs","standing","walking"];
-           predicted_label  = ["sitting", "standing", "walking", "jogging", "stairs"];
+           predicted_label = ["jogging","sitting","stairs","standing","walking"];
            disp(["Predict Activity: " predicted_label(predicted_class)])
            %disp(['Real act: ' act]);
            %disp(num2str(predicted_class));
@@ -138,8 +136,7 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
            %disp("flag model 3")
            [dense_1, ] = modelHAR3(buffered_data_3d(1,1:60,:), params);
            [~, predicted_class] = max(dense_1);
-           %predicted_label = ["jogging","sitting","stairs","standing","walking"];
-           predicted_label  = ["sitting", "standing", "walking", "jogging", "stairs"];
+           predicted_label = ["jogging","sitting","stairs","standing","walking"];
            disp(["Predict Activity: " predicted_label(predicted_class)])
            %disp(['Real act: ' act]);
            %disp(num2str(predicted_class));
@@ -147,8 +144,7 @@ function handleMessage(~, message, anim_lineaX, anim_lineaY, anim_lineaZ, anim_l
            %disp("flag model 4")
            [dense_1, ] = modelHAR3(reuse_buff, params);
            [~, predicted_class] = max(dense_1);
-           %predicted_label = ["jogging","sitting","stairs","standing","walking"];
-           predicted_label  = ["sitting", "standing", "walking", "jogging", "stairs"];              
+           predicted_label = ["jogging","sitting","stairs","standing","walking"];
            disp(["Predict Activity: " predicted_label(predicted_class)])
            %disp(['Real act: ' act]);
            %disp(num2str(predicted_class));

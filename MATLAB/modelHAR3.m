@@ -60,7 +60,7 @@ function [dense_1, state] = modelHAR3(conv1d_input, params, varargin)
 % CONV1D_INPUT
 %			- Input(s) to the ONNX network.
 %			  The input size(s) expected by the ONNX file are:
-%				  CONV1D_INPUT:		[unk__195, 60, 6]				Type: FLOAT
+%				  CONV1D_INPUT:		[unk__98, 60, 6]				Type: FLOAT
 %			  By default, the function will try to permute the input(s)
 %			  into this dimension ordering. If the default is incorrect,
 %			  use the 'InputDataPermutation' argument to control the
@@ -75,7 +75,7 @@ function [dense_1, state] = modelHAR3(conv1d_input, params, varargin)
 % DENSE_1
 %			- Output(s) of the ONNX network.
 %			  Without permutation, the size(s) of the outputs are:
-%				  DENSE_1:		[unk__196, 5]				Type: FLOAT
+%				  DENSE_1:		[unk__99, 5]				Type: FLOAT
 %			  By default, the function will try to permute the output(s)
 %			  from this dimension ordering into a conventional MATLAB
 %			  ordering. If the default is incorrect, use the
@@ -105,25 +105,25 @@ NumDims.conv1d_input = conv1d_inputNumDims1006;
 
 % Execute the operators:
 % Unsqueeze:
-[shape, NumDims.sequential_conv1d_Conv1D_ExpandDims_0] = prepareUnsqueezeArgs(Vars.conv1d_input, Vars.const_fold_opt__193, NumDims.conv1d_input);
+[shape, NumDims.sequential_conv1d_Conv1D_ExpandDims_0] = prepareUnsqueezeArgs(Vars.conv1d_input, Vars.const_fold_opt__94, NumDims.conv1d_input);
 Vars.sequential_conv1d_Conv1D_ExpandDims_0 = reshape(Vars.conv1d_input, shape);
 
 % Transpose:
-[perm, NumDims.sequential_conv1d_Conv1D__142_0] = prepareTransposeArgs(Vars.TransposePerm1001, NumDims.sequential_conv1d_Conv1D_ExpandDims_0);
+[perm, NumDims.sequential_conv1d_Conv1D__45_0] = prepareTransposeArgs(Vars.TransposePerm1001, NumDims.sequential_conv1d_Conv1D_ExpandDims_0);
 if ~isempty(perm)
-    Vars.sequential_conv1d_Conv1D__142_0 = permute(Vars.sequential_conv1d_Conv1D_ExpandDims_0, perm);
+    Vars.sequential_conv1d_Conv1D__45_0 = permute(Vars.sequential_conv1d_Conv1D_ExpandDims_0, perm);
 end
 
 % Conv:
-[weights, bias, stride, dilationFactor, padding, dataFormat, NumDims.sequential_conv1d_Conv1D_0] = prepareConvArgs(Vars.sequential_conv1d_Conv1D_ExpandDims_1_0, '', Vars.ConvStride1002, Vars.ConvDilationFactor1003, Vars.ConvPadding1004, 1, NumDims.sequential_conv1d_Conv1D__142_0, NumDims.sequential_conv1d_Conv1D_ExpandDims_1_0);
-Vars.sequential_conv1d_Conv1D_0 = dlconv(Vars.sequential_conv1d_Conv1D__142_0, weights, bias, 'Stride', stride, 'DilationFactor', dilationFactor, 'Padding', padding, 'DataFormat', dataFormat);
+[weights, bias, stride, dilationFactor, padding, dataFormat, NumDims.sequential_conv1d_Conv1D_0] = prepareConvArgs(Vars.sequential_conv1d_Conv1D_ExpandDims_1_0, '', Vars.ConvStride1002, Vars.ConvDilationFactor1003, Vars.ConvPadding1004, 1, NumDims.sequential_conv1d_Conv1D__45_0, NumDims.sequential_conv1d_Conv1D_ExpandDims_1_0);
+Vars.sequential_conv1d_Conv1D_0 = dlconv(Vars.sequential_conv1d_Conv1D__45_0, weights, bias, 'Stride', stride, 'DilationFactor', dilationFactor, 'Padding', padding, 'DataFormat', dataFormat);
 
 % Squeeze:
-[Vars.sequential_conv1d_Conv1D_Squeeze_0, NumDims.sequential_conv1d_Conv1D_Squeeze_0] = onnxSqueeze(Vars.sequential_conv1d_Conv1D_0, Vars.axes_const__146__171, NumDims.sequential_conv1d_Conv1D_0);
+[Vars.sequential_conv1d_Conv1D_Squeeze_0, NumDims.sequential_conv1d_Conv1D_Squeeze_0] = onnxSqueeze(Vars.sequential_conv1d_Conv1D_0, Vars.axes_const__49__74, NumDims.sequential_conv1d_Conv1D_0);
 
 % Add:
-Vars.sequential_conv1d_BiasAdd_0 = Vars.sequential_conv1d_Conv1D_Squeeze_0 + Vars.const_fold_opt__194;
-NumDims.sequential_conv1d_BiasAdd_0 = max(NumDims.sequential_conv1d_Conv1D_Squeeze_0, NumDims.const_fold_opt__194);
+Vars.sequential_conv1d_BiasAdd_0 = Vars.sequential_conv1d_Conv1D_Squeeze_0 + Vars.const_fold_opt__95;
+NumDims.sequential_conv1d_BiasAdd_0 = max(NumDims.sequential_conv1d_Conv1D_Squeeze_0, NumDims.const_fold_opt__95);
 
 % Transpose:
 [perm, NumDims.sequential_lstm_PartitionedCall_transp_1] = prepareTransposeArgs(Vars.TransposePerm1005, NumDims.sequential_conv1d_BiasAdd_0);
@@ -132,49 +132,49 @@ if ~isempty(perm)
 end
 
 % Shape:
-[Vars.Shape__184_0, NumDims.Shape__184_0] = onnxShape(Vars.sequential_conv1d_BiasAdd_0, NumDims.sequential_conv1d_BiasAdd_0);
+[Vars.Shape__87_0, NumDims.Shape__87_0] = onnxShape(Vars.sequential_conv1d_BiasAdd_0, NumDims.sequential_conv1d_BiasAdd_0);
 
 % Gather:
-[Vars.sequential_lstm_Shape_0, NumDims.sequential_lstm_Shape_0] = onnxGather(Vars.Shape__184_0, Vars.Const__186, 0, NumDims.Shape__184_0, NumDims.Const__186);
+[Vars.sequential_lstm_Shape_0, NumDims.sequential_lstm_Shape_0] = onnxGather(Vars.Shape__87_0, Vars.Const__89, 0, NumDims.Shape__87_0, NumDims.Const__89);
 
 % Cast:
-Vars.sequential_lstm_Shape__147_0 = cast(int32(extractdata(Vars.sequential_lstm_Shape_0)), 'like', Vars.sequential_lstm_Shape_0);
-NumDims.sequential_lstm_Shape__147_0 = NumDims.sequential_lstm_Shape_0;
+Vars.sequential_lstm_Shape__50_0 = cast(int32(extractdata(Vars.sequential_lstm_Shape_0)), 'like', Vars.sequential_lstm_Shape_0);
+NumDims.sequential_lstm_Shape__50_0 = NumDims.sequential_lstm_Shape_0;
 
 % Slice:
-[Indices, NumDims.sequential_lstm_strided_slice_0] = prepareSliceArgs(Vars.sequential_lstm_Shape__147_0, Vars.const_axes__153, Vars.const_ends__149, Vars.const_axes__153, '', NumDims.sequential_lstm_Shape__147_0);
-Vars.sequential_lstm_strided_slice_0 = subsref(Vars.sequential_lstm_Shape__147_0, Indices);
+[Indices, NumDims.sequential_lstm_strided_slice_0] = prepareSliceArgs(Vars.sequential_lstm_Shape__50_0, Vars.const_axes__70, Vars.const_ends__52, Vars.const_axes__70, '', NumDims.sequential_lstm_Shape__50_0);
+Vars.sequential_lstm_strided_slice_0 = subsref(Vars.sequential_lstm_Shape__50_0, Indices);
 
 % Concat:
-[Vars.sequential_lstm_zeros_packed_Concat__1_1, NumDims.sequential_lstm_zeros_packed_Concat__1_1] = onnxConcat(0, {Vars.sequential_lstm_strided_slice_0, Vars.const_fold_opt__189}, [NumDims.sequential_lstm_strided_slice_0, NumDims.const_fold_opt__189]);
+[Vars.sequential_lstm_zeros_packed_Concat__66_, NumDims.sequential_lstm_zeros_packed_Concat__66_] = onnxConcat(0, {Vars.sequential_lstm_strided_slice_0, Vars.const_fold_opt__97}, [NumDims.sequential_lstm_strided_slice_0, NumDims.const_fold_opt__97]);
 
 % Cast:
-Vars.sequential_lstm_zeros__164_0 = cast(int64(extractdata(Vars.sequential_lstm_zeros_packed_Concat__1_1)), 'like', Vars.sequential_lstm_zeros_packed_Concat__1_1);
-NumDims.sequential_lstm_zeros__164_0 = NumDims.sequential_lstm_zeros_packed_Concat__1_1;
+Vars.sequential_lstm_zeros_1__61_0 = cast(int64(extractdata(Vars.sequential_lstm_zeros_packed_Concat__66_)), 'like', Vars.sequential_lstm_zeros_packed_Concat__66_);
+NumDims.sequential_lstm_zeros_1__61_0 = NumDims.sequential_lstm_zeros_packed_Concat__66_;
 
 % Expand:
-[shape, NumDims.sequential_lstm_zeros_0] = prepareExpandArgs(Vars.sequential_lstm_zeros__164_0);
+[shape, NumDims.sequential_lstm_zeros_0] = prepareExpandArgs(Vars.sequential_lstm_zeros_1__61_0);
 Vars.sequential_lstm_zeros_0 = Vars.sequential_lstm_zeros_Const_0 + zeros(shape);
 
 % Unsqueeze:
-[shape, NumDims.Unsqueeze__119_0] = prepareUnsqueezeArgs(Vars.sequential_lstm_zeros_0, Vars.const_axes__153, NumDims.sequential_lstm_zeros_0);
-Vars.Unsqueeze__119_0 = reshape(Vars.sequential_lstm_zeros_0, shape);
+[shape, NumDims.Unsqueeze__22_0] = prepareUnsqueezeArgs(Vars.sequential_lstm_zeros_0, Vars.const_axes__70, NumDims.sequential_lstm_zeros_0);
+Vars.Unsqueeze__22_0 = reshape(Vars.sequential_lstm_zeros_0, shape);
 
 % LSTM:
-[H0, C0, WEIGHTS, RECURRENTWEIGHTS, BIAS, NumDims.LSTM__127_0, NumDims.LSTM__127_1, NumDims.LSTM__127_2] = prepareLSTMArgs(Vars.W0__124, Vars.R0__125, Vars.B0__126, '', Vars.Unsqueeze__119_0, Vars.Unsqueeze__119_0, '');
-[Vars.LSTM__127_0, Vars.LSTM__127_1, Vars.LSTM__127_2] = lstm(Vars.sequential_lstm_PartitionedCall_transp_1, H0, C0, WEIGHTS, RECURRENTWEIGHTS, BIAS, 'DataFormat', 'CBT');
-[C, B, T] = size(Vars.LSTM__127_0, 1:3);
-Vars.LSTM__127_0 = reshape(Vars.LSTM__127_0, [C B 1 T]);
+[H0, C0, WEIGHTS, RECURRENTWEIGHTS, BIAS, NumDims.LSTM__30_0, NumDims.LSTM__30_1, NumDims.LSTM__30_2] = prepareLSTMArgs(Vars.W0__27, Vars.R0__28, Vars.B0__29, '', Vars.Unsqueeze__22_0, Vars.Unsqueeze__22_0, '');
+[Vars.LSTM__30_0, Vars.LSTM__30_1, Vars.LSTM__30_2] = lstm(Vars.sequential_lstm_PartitionedCall_transp_1, H0, C0, WEIGHTS, RECURRENTWEIGHTS, BIAS, 'DataFormat', 'CBT');
+[C, B, T] = size(Vars.LSTM__30_0, 1:3);
+Vars.LSTM__30_0 = reshape(Vars.LSTM__30_0, [C B 1 T]);
 
 % Squeeze:
-[Vars.Squeeze__131_0, NumDims.Squeeze__131_0] = onnxSqueeze(Vars.LSTM__127_0, Vars.const_ends__149, NumDims.LSTM__127_0);
+[Vars.Squeeze__34_0, NumDims.Squeeze__34_0] = onnxSqueeze(Vars.LSTM__30_0, Vars.const_ends__52, NumDims.LSTM__30_0);
 
 % Slice:
-[Indices, NumDims.sequential_lstm_PartitionedCall_stride_1] = prepareSliceArgs(Vars.Squeeze__131_0, Vars.const_starts__165, Vars.const_ends__166, Vars.const_axes__153, '', NumDims.Squeeze__131_0);
-Vars.sequential_lstm_PartitionedCall_stride_1 = subsref(Vars.Squeeze__131_0, Indices);
+[Indices, NumDims.sequential_lstm_PartitionedCall_stride_1] = prepareSliceArgs(Vars.Squeeze__34_0, Vars.const_starts__68, Vars.const_ends__69, Vars.const_axes__70, '', NumDims.Squeeze__34_0);
+Vars.sequential_lstm_PartitionedCall_stride_1 = subsref(Vars.Squeeze__34_0, Indices);
 
 % Squeeze:
-[Vars.sequential_lstm_PartitionedCall_stride_3, NumDims.sequential_lstm_PartitionedCall_stride_3] = onnxSqueeze(Vars.sequential_lstm_PartitionedCall_stride_1, Vars.const_axes__153, NumDims.sequential_lstm_PartitionedCall_stride_1);
+[Vars.sequential_lstm_PartitionedCall_stride_3, NumDims.sequential_lstm_PartitionedCall_stride_3] = onnxSqueeze(Vars.sequential_lstm_PartitionedCall_stride_1, Vars.const_axes__70, NumDims.sequential_lstm_PartitionedCall_stride_1);
 
 % MatMul:
 [Vars.sequential_dense_MatMul_0, NumDims.sequential_dense_MatMul_0] = onnxMatMul(Vars.sequential_lstm_PartitionedCall_stride_3, Vars.sequential_dense_MatMul_ReadVariableOp_0, NumDims.sequential_lstm_PartitionedCall_stride_3, NumDims.sequential_dense_MatMul_ReadVariableOp_0);
@@ -241,7 +241,7 @@ conv1d_input = makeUnlabeledDlarray(conv1d_input);
 % Permute inputs if requested:
 conv1d_input = permuteInputVar(conv1d_input, inputDataPerms{1}, 3);
 % Check input size(s):
-checkInputSize(size(conv1d_input), {'unk__195' 60 6}, "conv1d_input");
+checkInputSize(size(conv1d_input), {'unk__98' 60 6}, "conv1d_input");
 end
 
 function [dense_1] = postprocessOutput(dense_1, outputDataPerms, anyDlarrayInputs, Training, varargin)
